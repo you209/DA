@@ -179,13 +179,3 @@ start-admin.bat
 
 - **Public mode:** content-only user experience.
 - **Admin mode:** shows dev/admin ingestion controls.
-
-## Policy and compliance page
-
-A dedicated public page now exists at `/policy` covering:
-- mission and goal
-- legal safety message
-- compliance commitments
-- data source standards
-- verification and review process
-- safe provider handoff model

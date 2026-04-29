@@ -69,7 +69,7 @@ export default function HelpHubApp() {
     <div className="mx-auto max-w-6xl">
       <h1 className="text-3xl font-bold text-teal-700">HelpHub AU</h1>
       <p className="mt-2 rounded-xl bg-amber-100 p-3 text-base">This app helps people find support services. It is not emergency, legal, medical, or counselling advice. If you are in immediate danger, call 000.</p>
-      <div className="mt-3 flex flex-wrap gap-2"><button className="rounded-xl border px-4 py-2" onClick={() => setIsSimple((v) => !v)}>{isSimple ? 'Switch to Full Mode' : 'Switch to Simple Mode'}</button><a href="/policy" className="rounded-xl border px-4 py-2">Policy & Compliance</a></div>
+      <button className="mt-3 rounded-xl border px-4 py-2" onClick={() => setIsSimple((v) => !v)}>{isSimple ? 'Switch to Full Mode' : 'Switch to Simple Mode'}</button>
 
       {isSimple ? <section className="mt-4 space-y-4">
         <div className="rounded-2xl border bg-white p-4">
