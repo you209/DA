@@ -2,6 +2,20 @@
 
 A mobile-first + desktop-complete support services finder built with Next.js, TypeScript, and Tailwind.
 
+
+
+## 0) Super quick click-to-see preview (no npm needed)
+
+If you just want to click and see something immediately:
+
+```bash
+./start-preview.sh
+```
+
+Then open `http://localhost:4173`.
+
+This launches a lightweight clickable demo (`demo/index.html`) so you can test the flow instantly.
+
 ## 1) Run locally (fastest)
 
 ### Prerequisites
