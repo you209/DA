@@ -29,3 +29,13 @@ Date checked: 2026-04-29
 ## Practitioner directory
 - Healthdirect Service Finder: https://www.healthdirect.gov.au/
 - Healthdirect mental health help: https://www.healthdirect.gov.au/mental-health-where-to-get-help
+
+## Additional hotlines/services to ingest next (official)
+- MensLine Australia: https://mensline.org.au/
+- QLife: https://qlife.org.au/
+- Suicide Call Back Service: https://www.suicidecallbackservice.org.au/
+- 1800ELDERHelp: https://www.1800elderhelp.org.au/
+- Open Arms: https://www.openarms.gov.au/
+- eheadspace: https://headspace.org.au/eheadspace/
+- Parentline QLD: https://parentline.com.au/
+- NDIS: https://www.ndis.gov.au/

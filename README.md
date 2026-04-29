@@ -241,3 +241,11 @@ These are marked `needs_review` where verification still needs admin confirmatio
 
 Added `docs/RESEARCH_SOURCES.md` with official/preferred links for each requested area.
 Use these for ongoing import validation and admin verification.
+
+## Admin: toggle groups/services out
+
+In Admin mode (Full Mode > Dev ingestion controls), you can now:
+- hide/show Facebook/community groups from public results
+- disable/enable any service entry with a button toggle
+
+This supports rapid moderation before publishing.
