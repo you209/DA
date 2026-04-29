@@ -73,3 +73,24 @@ If `npm install` fails with `403 Forbidden`, your environment is blocking npm re
 ## 6) Supabase schema
 
 See `supabase/schema.sql` for placeholder tables + sample seed services.
+
+## 7) Build Android APK with Capacitor (hands-on)
+
+If you want a real APK from this codebase, these are the exact commands:
+
+```bash
+npm install
+npm run android:init
+npm run android:sync
+npm run android:open
+```
+
+Then in Android Studio:
+1. Wait for Gradle sync.
+2. Build > Build Bundle(s) / APK(s) > Build APK(s).
+3. Use generated debug APK for testing.
+4. For release, create a keystore and sign the app.
+
+### Notes
+- `webDir` is set to `out` in `capacitor.config.ts`, so Capacitor uses exported static files.
+- Run `npm run android:sync` each time web code changes.
