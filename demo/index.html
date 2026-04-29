@@ -1,0 +1,31 @@
+<!doctype html>
+<html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>HelpHub AU Demo</title>
+<style>body{font-family:Arial,sans-serif;background:#f8fafc;margin:0}header{padding:16px;background:#0f766e;color:white}main{padding:16px;max-width:900px;margin:auto}.card{background:white;border:1px solid #ddd;border-radius:12px;padding:12px;margin:10px 0}.btn{padding:8px 12px;border-radius:8px;border:1px solid #ccc;background:white;cursor:pointer}.primary{background:#0f766e;color:#fff;border:none}.exit{position:fixed;top:10px;right:10px;background:#dc2626;color:white;border:none;padding:10px 14px;border-radius:999px}#details{position:sticky;top:10px}</style>
+</head><body>
+<button class='exit' onclick='location.href="https://www.google.com"'>Exit now</button>
+<header><h1>HelpHub AU - Clickable Demo</h1></header>
+<main>
+<p><b>Disclaimer:</b> This app helps people find support services. It is not emergency, legal, medical, or counselling advice. If you are in immediate danger, call 000.</p>
+<input id='q' placeholder='Type: I need help with ADHD diagnosis' style='width:100%;padding:10px;border-radius:8px;border:1px solid #bbb'>
+<div id='list'></div>
+<div id='details' class='card'><h3>Service details</h3><p>Click More info on a service.</p></div>
+</main>
+<script>
+const services=[
+{name:'000 Emergency',helps:'Immediate danger or emergency',phone:'000',website:'https://www.triplezero.gov.au',desc:'Call 000 if someone is in immediate danger.'},
+{name:'1800RESPECT',helps:'Domestic and family violence support',phone:'1800 737 732',website:'https://www.1800respect.org.au',desc:'Confidential support and referrals.'},
+{name:'Lifeline',helps:'Anyone in emotional distress',phone:'13 11 14',website:'https://www.lifeline.org.au',desc:'24/7 crisis support and suicide prevention.'},
+{name:'Beyond Blue',helps:'Mental health support',phone:'1300 22 4636',website:'https://www.beyondblue.org.au',desc:'Support for anxiety and depression.'},
+{name:'Kids Helpline',helps:'Young people aged 5 to 25',phone:'1800 55 1800',website:'https://kidshelpline.com.au',desc:'Free 24/7 counselling for young people.'},
+{name:'Healthdirect',helps:'Health advice and service finder',phone:'1800 022 222',website:'https://www.healthdirect.gov.au',desc:'Government-funded health advice line.'},
+{name:'Autism Connect',helps:'Autistic people and carers',phone:'1300 308 699',website:'https://www.amaze.org.au/autism-connect',desc:'Guidance to autism supports.'},
+{name:'Ask Izzy',helps:'Find local housing/food/legal help',phone:'N/A',website:'https://askizzy.org.au',desc:'Search tool for practical support services.'}
+];
+const list=document.getElementById('list');
+const details=document.getElementById('details');
+function render(){const q=document.getElementById('q').value.toLowerCase();list.innerHTML='';services.filter(s=>!q||Object.values(s).join(' ').toLowerCase().includes(q)).forEach(s=>{const c=document.createElement('div');c.className='card';c.innerHTML=`<h3>${s.name}</h3><p>${s.helps}</p><button class='btn primary' onclick="window.location='tel:${s.phone.replace(/ /g,'')}'">Phone</button> <a class='btn' href='${s.website}' target='_blank'>Website</a> <button class='btn' onclick='show(${JSON.stringify(s)})'>More info</button>`;list.appendChild(c);});}
+window.show=(s)=>{details.innerHTML=`<h3>${s.name}</h3><p>${s.desc}</p><p><b>Phone:</b> ${s.phone}</p>`}
+q.addEventListener('input',render);render();
+</script>
+</body></html>
