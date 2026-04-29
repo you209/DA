@@ -129,3 +129,19 @@ Admin workflow is represented in the app Admin tab:
 - verified/unverified status
 - easy-read editing workflow
 - disable inactive services
+
+## Simple Mode (default) + Full Mode
+
+The app now starts in **Simple Mode** by default for calm, low-stress support.
+
+Simple Mode screens:
+1. I need help now
+2. Tell me what’s happening
+3. Find support near me
+4. Saved help
+5. My support log
+6. Quick Exit (always visible)
+
+Simple Mode keeps one main question at a time, big buttons, easy-read language, obvious Call/Website actions, and hides complexity until needed.
+
+Use **Switch to Full Mode** for advanced filters, full directory behavior, courses/programs exploration, and admin-style details.
