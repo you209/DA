@@ -9,7 +9,8 @@ A mobile-first + desktop-complete support services finder built with Next.js, Ty
 If you just want to click and see something immediately:
 
 ```bash
-./start-preview.sh
+./start-preview.sh  (Mac/Linux)
+start-preview.bat (Windows)
 ```
 
 Then open `http://localhost:4173`.
@@ -108,3 +109,23 @@ Then in Android Studio:
 ### Notes
 - `webDir` is set to `out` in `capacitor.config.ts`, so Capacitor uses exported static files.
 - Run `npm run android:sync` each time web code changes.
+
+
+## Content population update
+
+More content has now been preloaded in `lib/data.ts` so you can browse a larger service list during testing (mental health, family violence, LGBTQIA+, youth, ADHD, autism and more).
+
+## Data ingestion system (new)
+
+HelpHub now includes ingestion primitives in `lib/ingestion.ts` for:
+- API import
+- CSV import
+- Manual admin import
+- Approved public-page import (when terms allow)
+
+Admin workflow is represented in the app Admin tab:
+- review before publish
+- flag outdated
+- verified/unverified status
+- easy-read editing workflow
+- disable inactive services

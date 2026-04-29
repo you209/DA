@@ -1,3 +1,5 @@
+import type { SupportService } from './types';
+
 export const states = ['TAS','VIC','NSW','QLD','SA','WA','NT','ACT'];
 export const categories = [
   'Domestic violence','Family violence','Mental health','Crisis support','Legal help','Housing',
