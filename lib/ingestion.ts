@@ -6,22 +6,24 @@ export type ImportRecord = {
   sourceUrl: string;
   fetchedAt: string;
   services: SupportService[];
+  approved: boolean;
 };
 
 export async function importFromApi(fetcher: () => Promise<SupportService[]>, sourceName: string, sourceUrl: string): Promise<ImportRecord> {
-  return { method: 'api', sourceName, sourceUrl, fetchedAt: new Date().toISOString(), services: await fetcher() };
+  return { method: 'api', sourceName, sourceUrl, fetchedAt: new Date().toISOString(), services: await fetcher(), approved: false };
 }
-
 export function importFromCsv(rows: SupportService[], sourceName: string, sourceUrl: string): ImportRecord {
-  return { method: 'csv', sourceName, sourceUrl, fetchedAt: new Date().toISOString(), services: rows };
+  return { method: 'csv', sourceName, sourceUrl, fetchedAt: new Date().toISOString(), services: rows, approved: false };
 }
-
 export function importManual(services: SupportService[], sourceName = 'Admin Manual Entry'): ImportRecord {
-  return { method: 'manual', sourceName, sourceUrl: 'admin://manual', fetchedAt: new Date().toISOString(), services };
+  return { method: 'manual', sourceName, sourceUrl: 'admin://manual', fetchedAt: new Date().toISOString(), services, approved: true };
+}
+export function importFromApprovedPublicPage(services: SupportService[], sourceName: string, sourceUrl: string): ImportRecord {
+  return { method: 'approved_scrape', sourceName, sourceUrl, fetchedAt: new Date().toISOString(), services, approved: false };
 }
 
-export function importFromApprovedPublicPage(services: SupportService[], sourceName: string, sourceUrl: string): ImportRecord {
-  return { method: 'approved_scrape', sourceName, sourceUrl, fetchedAt: new Date().toISOString(), services };
+export function forceScrapeDevOnly(sourceName: string, sourceUrl: string): ImportRecord {
+  return { method: 'approved_scrape', sourceName, sourceUrl, fetchedAt: new Date().toISOString(), services: [], approved: false };
 }
 
 export function suggestRelated(service: SupportService, pool: SupportService[], need: string) {
