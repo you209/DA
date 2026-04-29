@@ -179,3 +179,30 @@ start-admin.bat
 
 - **Public mode:** content-only user experience.
 - **Admin mode:** shows dev/admin ingestion controls.
+
+## Policy and compliance page
+
+A dedicated public page now exists at `/policy` covering:
+- mission and goal
+- legal safety message
+- compliance commitments
+- data source standards
+- verification and review process
+- safe provider handoff model
+
+## CSV import file (restored content)
+
+A ready-to-import CSV is included at:
+
+- `data/imports/helphub_services_seed.csv`
+
+It includes helplines and services with the full ingestion fields:
+`source_url, source_name, last_checked_at, verified_status, normal_description, easy_read_description, eligibility, opening_hours, phone, website, state, service_area, categories, tags, courses_programs, related_services, active`.
+
+Multi-value fields use `|` separators (for example in categories/tags/courses).
+
+## Admin CSV upload preview
+
+In Admin mode, you can now upload a `.csv` file in the Dev ingestion controls.
+- It previews the first rows immediately.
+- This is a review step before publish.
