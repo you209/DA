@@ -206,3 +206,46 @@ Multi-value fields use `|` separators (for example in categories/tags/courses).
 In Admin mode, you can now upload a `.csv` file in the Dev ingestion controls.
 - It previews the first rows immediately.
 - This is a review step before publish.
+
+## New services and placeholders
+
+Added additional service entries (from official provider/government sources) including:
+- 13YARN
+- SANE Australia
+- Open Arms
+
+Added placeholder planning file for staged content expansion:
+- `docs/SERVICE_PLACEHOLDERS.md`
+
+
+Additional placeholder import file:
+- `data/imports/helphub_placeholders.csv`
+
+This file contains draft rows for all missing categories so admin can review and publish later.
+
+## Newly created requested categories
+
+Created live directory entries for:
+- legal help
+- housing
+- grandparent/family support
+- ADHD pathway
+- autism pathway
+- child support
+- Facebook/community groups
+- practitioner directory
+
+These are marked `needs_review` where verification still needs admin confirmation.
+
+## Deep research source file
+
+Added `docs/RESEARCH_SOURCES.md` with official/preferred links for each requested area.
+Use these for ongoing import validation and admin verification.
+
+## Admin: toggle groups/services out
+
+In Admin mode (Full Mode > Dev ingestion controls), you can now:
+- hide/show Facebook/community groups from public results
+- disable/enable any service entry with a button toggle
+
+This supports rapid moderation before publishing.
