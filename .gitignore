@@ -1,0 +1,6 @@
+node_modules
+.next
+out
+android
+npm-debug.log*
+.DS_Store
