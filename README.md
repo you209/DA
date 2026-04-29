@@ -236,3 +236,8 @@ Created live directory entries for:
 - practitioner directory
 
 These are marked `needs_review` where verification still needs admin confirmation.
+
+## Deep research source file
+
+Added `docs/RESEARCH_SOURCES.md` with official/preferred links for each requested area.
+Use these for ongoing import validation and admin verification.
