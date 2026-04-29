@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+body { @apply bg-slate-50 text-slate-900; }
+.high-contrast { @apply bg-black text-white; }
+.high-contrast button, .high-contrast a { @apply border-white text-white; }
+.font-lg { font-size: 112.5%; }
+.font-xl { font-size: 125%; }
