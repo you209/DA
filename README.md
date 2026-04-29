@@ -249,3 +249,59 @@ In Admin mode (Full Mode > Dev ingestion controls), you can now:
 - disable/enable any service entry with a button toggle
 
 This supports rapid moderation before publishing.
+
+## Admin publish workflow (new)
+
+Admin controls now support a local publish stage per service:
+- Draft
+- Review
+- Published
+
+Public mode only shows `Published` items.
+Dev/Admin mode can still see all items for moderation.
+
+## Next 4 steps implemented
+
+Implemented in MVP scaffold:
+1. Persist publish stage locally (`publish_state`), mirroring intended Supabase persistence.
+2. Role selector in admin panel (viewer/editor/verifier/admin).
+3. Audit log feed in admin panel for stage changes.
+4. Re-verification reminder banner for services older than 90 days.
+
+Schema updates added for production persistence:
+- `publish_stage` on `services`
+- `admin_roles`
+- `audit_logs`
+- `verification_reminders`
+
+## Reliability, safety, import, and parity upgrades added
+
+Implemented now in MVP:
+- Last checked + verified by shown on service cards
+- Report incorrect info action on service cards
+- Double-Esc quick exit support + neutral destination choice (Google/BOM)
+- Browser history warning near quick exit controls
+- Safety plan export to text file
+- Admin publish workflow + role selector + audit log + stale reminder
+- Community group moderation queue in admin panel
+- CSV pipeline utility module with required-column validation + duplicate detection
+- Added dedicated placeholder pages for Practitioner Search and Courses & Programs
+
+Still pending full production implementation:
+- Supabase auth/RLS wiring
+- Automated scheduler job (30/60/90)
+- Telemetry backend + dashboards
+- Backup/restore runbooks
+
+## Production readiness implemented
+
+Added production scaffolding for the remaining work:
+- Supabase auth + RLS policies in `supabase/schema.sql`
+- Verification scheduler SQL function: `generate_verification_reminders()`
+- Telemetry events table with admin-read policy
+- Ops runbooks:
+  - `docs/ops/RELEASE_RUNBOOK.md`
+  - `docs/ops/BACKUP_RESTORE.md`
+- Backup/restore scripts:
+  - `scripts/backup.sh`
+  - `scripts/restore.sh`
