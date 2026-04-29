@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { categories, services as allServices, states } from '@/lib/data';
-import { suggestRelated } from '@/lib/ingestion';
+import { forceScrapeDevOnly, suggestRelated } from '@/lib/ingestion';
 
 const situations = [
   "I'm scared or unsafe",
@@ -18,6 +18,8 @@ const situations = [
 
 export default function HelpHubApp() {
   const [isSimple, setIsSimple] = useState(true);
+  const isDev = process.env.NEXT_PUBLIC_DEV_MODE === 'true';
+  const [imports, setImports] = useState<string[]>([]);
   const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1);
   const [need, setNeed] = useState('');
   const [query, setQuery] = useState('');
@@ -36,7 +38,6 @@ export default function HelpHubApp() {
     const matchCat = !category || s.categories.includes(category);
     const matchQ = !q || [s.name, s.normal_description, s.easy_read_description, ...s.categories, ...s.tags].join(' ').toLowerCase().includes(q);
     return s.active && s.verified_status !== 'unverified' && matchState && matchCat && matchQ;
-    return s.active && matchState && matchCat && matchQ;
   }), [query, need, stateFilter, category]);
 
   const selectedService = allServices.find((s) => s.id === selected) || filtered[0];
@@ -88,7 +89,6 @@ export default function HelpHubApp() {
       </section> : <section className="mt-4 grid gap-4 md:grid-cols-[320px_1fr]">
         <aside className="rounded-2xl border bg-white p-4"><h2 className="text-xl font-semibold">Full Mode filters</h2><select className="mt-2 w-full rounded border p-2" value={stateFilter} onChange={(e)=>setStateFilter(e.target.value)}><option value=''>All states</option>{states.map(s=><option key={s}>{s}</option>)}</select><select className="mt-2 w-full rounded border p-2" value={category} onChange={(e)=>setCategory(e.target.value)}><option value=''>All categories</option>{categories.map(c=><option key={c}>{c}</option>)}</select><input className="mt-2 w-full rounded border p-2" value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Search directory" /><div className="mt-3 text-sm">Map view (placeholder) · Practitioner search · Facebook/community groups · export support history</div></aside>
         <div className="space-y-3">{filtered.map((s)=> <article key={s.id} className="rounded-2xl border bg-white p-4"><h3 className="text-xl font-semibold">{s.name}</h3><p>{s.normal_description}</p><p className="text-sm">{s.state} · {s.opening_hours} · {s.verified_status}</p><div className="mt-2 flex gap-2"><a href={`tel:${s.phone.replace(/\s/g,'')}`} className="rounded bg-teal-700 px-3 py-2 text-white">Call</a><a href={s.website} className="rounded border px-3 py-2">Website</a><button onClick={()=>saveService(s.id)} className="rounded border px-3 py-2">{saved.includes(s.id)?'Saved':'Save'}</button></div><div className="mt-2 text-sm">Courses: {s.courses_programs.join(', ') || 'None'}</div></article>)}<div className="rounded-2xl border bg-white p-4"><h3 className="font-semibold">Admin-style detail view</h3><p>Source URL, verification status, last checked, eligibility, related services are available in data model.</p></div>{isDev && <div className="rounded-2xl border bg-amber-50 p-4"><h3 className="font-semibold">Dev ingestion controls</h3><p className="text-sm">For admins only. Public users never see this panel.</p><div className="mt-2 flex flex-wrap gap-2"><button className="rounded border px-3 py-2" onClick={()=>setImports(i=>[`API import queued ${new Date().toLocaleTimeString()}`,...i])}>Run API import</button><button className="rounded border px-3 py-2" onClick={()=>setImports(i=>[`CSV import queued ${new Date().toLocaleTimeString()}`,...i])}>Run CSV import</button><button className="rounded border px-3 py-2" onClick={()=>setImports(i=>[`Manual entry saved ${new Date().toLocaleTimeString()}`,...i])}>Manual entry</button><button className="rounded border px-3 py-2 bg-red-100" onClick={()=>{const job=forceScrapeDevOnly('Approved directory','https://example.org');setImports(i=>[`Force scrape (dev): ${job.sourceName} ${job.fetchedAt}`,...i]);}}>Force scrape (dev only)</button></div><ul className="mt-2 list-disc pl-5 text-sm">{imports.map((x,idx)=><li key={idx}>{x}</li>)}</ul></div>}</div>
-        <div className="space-y-3">{filtered.map((s)=> <article key={s.id} className="rounded-2xl border bg-white p-4"><h3 className="text-xl font-semibold">{s.name}</h3><p>{s.normal_description}</p><p className="text-sm">{s.state} · {s.opening_hours} · {s.verified_status}</p><div className="mt-2 flex gap-2"><a href={`tel:${s.phone.replace(/\s/g,'')}`} className="rounded bg-teal-700 px-3 py-2 text-white">Call</a><a href={s.website} className="rounded border px-3 py-2">Website</a><button onClick={()=>saveService(s.id)} className="rounded border px-3 py-2">{saved.includes(s.id)?'Saved':'Save'}</button></div><div className="mt-2 text-sm">Courses: {s.courses_programs.join(', ') || 'None'}</div></article>)}<div className="rounded-2xl border bg-white p-4"><h3 className="font-semibold">Admin-style detail view</h3><p>Source URL, verification status, last checked, eligibility, related services are available in data model.</p></div></div>
       </section>}
     </div>
   </main>;

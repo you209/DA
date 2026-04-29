@@ -145,3 +145,37 @@ Simple Mode screens:
 Simple Mode keeps one main question at a time, big buttons, easy-read language, obvious Call/Website actions, and hides complexity until needed.
 
 Use **Switch to Full Mode** for advanced filters, full directory behavior, courses/programs exploration, and admin-style details.
+
+## Dev/Admin mode vs Public mode
+
+There are now two experiences:
+
+- **Public mode (default):** users only see support content and guidance.
+- **Dev/Admin mode:** enables ingestion/admin controls, including a dev-only force-scrape trigger for approved-directory testing.
+
+Set in `.env.local`:
+
+```bash
+NEXT_PUBLIC_DEV_MODE=true
+```
+
+If not set, the app behaves as public-facing content-only mode.
+
+## Fast launch: Public vs Admin mode
+
+After `npm install`, use one of these:
+
+### Mac/Linux
+```bash
+./start-public.sh
+./start-admin.sh
+```
+
+### Windows
+```bat
+start-public.bat
+start-admin.bat
+```
+
+- **Public mode:** content-only user experience.
+- **Admin mode:** shows dev/admin ingestion controls.

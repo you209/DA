@@ -6,25 +6,10 @@ export const categories = [
   'Grandparents/family support','ADHD','Autism','Neurodivergent support','Psychologists','Doctors/GPs','Facebook/community groups'
 ];
 
-export type Service = {
-  id: string;
-  name: string;
-  helps: string;
-  phone: string;
-  website: string;
-  hours: string;
-  area: string;
-  tags: string[];
-  description: string;
-};
-
-export const services: Service[] = [
-  {id:'000',name:'000 Emergency',helps:'Immediate danger or emergency',phone:'000',website:'https://www.triplezero.gov.au',hours:'24/7',area:'Australia-wide',tags:['Crisis support'],description:'Call 000 if someone is seriously hurt, unsafe, or in immediate danger.'},
-  {id:'1800respect',name:'1800RESPECT',helps:'People impacted by domestic, family, or sexual violence',phone:'1800 737 732',website:'https://www.1800respect.org.au',hours:'24/7',area:'Australia-wide',tags:['Domestic violence','Family violence'],description:'Confidential counselling, information, and referral support.'},
-  {id:'lifeline',name:'Lifeline',helps:'Anyone in emotional distress or crisis',phone:'13 11 14',website:'https://www.lifeline.org.au',hours:'24/7',area:'Australia-wide',tags:['Mental health','Crisis support'],description:'Crisis support and suicide prevention services by phone and chat.'},
-  {id:'beyondblue',name:'Beyond Blue',helps:'People experiencing anxiety or depression',phone:'1300 22 4636',website:'https://www.beyondblue.org.au',hours:'24/7',area:'Australia-wide',tags:['Mental health'],description:'Support line and resources for mental health and wellbeing.'},
-  {id:'kids',name:'Kids Helpline',helps:'Young people aged 5 to 25',phone:'1800 55 1800',website:'https://kidshelpline.com.au',hours:'24/7',area:'Australia-wide',tags:['Mental health','Family violence'],description:'Free counselling for children and young adults.'},
-  {id:'healthdirect',name:'Healthdirect',helps:'Anyone needing health advice',phone:'1800 022 222',website:'https://www.healthdirect.gov.au',hours:'24/7',area:'Australia-wide',tags:['Doctors/GPs'],description:'Government-funded health advice and service finder.'},
-  {id:'autismconnect',name:'Autism Connect',helps:'Autistic people, families and carers',phone:'1300 308 699',website:'https://www.amaze.org.au/autism-connect',hours:'Business hours',area:'Australia-wide',tags:['Autism','Neurodivergent support'],description:'Guidance to autism supports and trusted local pathways.'},
-  {id:'askizzy',name:'Ask Izzy',helps:'People looking for local support services',phone:'N/A',website:'https://askizzy.org.au',hours:'Always available online',area:'Australia-wide',tags:['Housing','Legal help','Crisis support'],description:'Search tool to find housing, food, health and legal help.'}
+export const services: SupportService[] = [
+  { id:'lifeline', name:'Lifeline', source_url:'https://www.lifeline.org.au', source_name:'Lifeline', last_checked_at:'2026-04-29', verified_status:'verified', normal_description:'Crisis support and suicide prevention by phone and chat.', easy_read_description:'Lifeline helps when you feel very upset. Call any time.', eligibility:'Anyone', opening_hours:'24/7', phone:'13 11 14', website:'https://www.lifeline.org.au', state:'Australia-wide', service_area:'National', categories:['Mental health','Crisis support'], tags:['crisis','suicide prevention'], courses_programs:['Online wellbeing tools'], related_services:['beyondblue','000'], active:true },
+  { id:'beyondblue', name:'Beyond Blue', source_url:'https://www.beyondblue.org.au', source_name:'Beyond Blue', last_checked_at:'2026-04-29', verified_status:'verified', normal_description:'Support for anxiety, depression and mental wellbeing.', easy_read_description:'Beyond Blue helps with anxiety and sadness.', eligibility:'Anyone', opening_hours:'24/7', phone:'1300 22 4636', website:'https://www.beyondblue.org.au', state:'Australia-wide', service_area:'National', categories:['Mental health'], tags:['anxiety','depression'], courses_programs:['Online forums','Self-help programs'], related_services:['lifeline','healthdirect'], active:true },
+  { id:'1800respect', name:'1800RESPECT', source_url:'https://www.1800respect.org.au', source_name:'1800RESPECT', last_checked_at:'2026-04-29', verified_status:'verified', normal_description:'Family, domestic and sexual violence counselling and referral.', easy_read_description:'1800RESPECT helps if home is not safe.', eligibility:'People impacted by violence', opening_hours:'24/7', phone:'1800 737 732', website:'https://www.1800respect.org.au', state:'Australia-wide', service_area:'National', categories:['Domestic violence','Family violence','Crisis support'], tags:['safety','violence'], courses_programs:['Safety planning resources'], related_services:['safe-steps','000'], active:true },
+  { id:'safe-steps', name:'Safe Steps (VIC)', source_url:'https://www.safesteps.org.au', source_name:'Safe Steps', last_checked_at:'2026-04-29', verified_status:'verified', normal_description:'24/7 specialist family violence support in Victoria.', easy_read_description:'Safe Steps helps people in Victoria who are unsafe at home.', eligibility:'Victorian residents and visitors', opening_hours:'24/7', phone:'1800 015 188', website:'https://www.safesteps.org.au', state:'VIC', service_area:'Victoria', categories:['Domestic violence','Family violence','Crisis support'], tags:['safety','emergency'], courses_programs:['Safety planning'], related_services:['1800respect','000'], active:true },
+  { id:'000', name:'000 Emergency', source_url:'https://www.triplezero.gov.au', source_name:'Triple Zero', last_checked_at:'2026-04-29', verified_status:'verified', normal_description:'Emergency police, ambulance, fire.', easy_read_description:'Call 000 now if you are in danger.', eligibility:'Anyone in immediate danger', opening_hours:'24/7', phone:'000', website:'https://www.triplezero.gov.au', state:'Australia-wide', service_area:'National', categories:['Crisis support'], tags:['emergency'], courses_programs:[], related_services:['lifeline','1800respect'], active:true }
 ];
