@@ -330,3 +330,9 @@ Required env vars:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY` (server only)
+
+## Hotline and tab fixes
+
+- Added more hotline services to core data (Parentline QLD, 1800ELDERHelp, Suicide Call Back Service).
+- Added a dedicated "Top hotlines" list in Simple Mode step 1.
+- Added explicit Full Mode navigation tabs (Directory, Courses, Practitioners, Policy).
