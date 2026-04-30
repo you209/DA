@@ -336,3 +336,33 @@ Required env vars:
 - Added more hotline services to core data (Parentline QLD, 1800ELDERHelp, Suicide Call Back Service).
 - Added a dedicated "Top hotlines" list in Simple Mode step 1.
 - Added explicit Full Mode navigation tabs (Directory, Courses, Practitioners, Policy).
+
+## Practitioner list population
+
+`/practitioners` now renders a populated practitioner-pathway list from live service data
+(Psychologists + Doctors/GPs categories), including call and website actions.
+
+Added additional researched services:
+- Relationships Australia (courses/workshops + counselling)
+- eheadspace
+
+## Additional advocacy + government services added
+
+Added new entries for:
+- WWDA
+- Carer Gateway
+- Family Relationship Advice Line
+- ANPA (marked needs_review pending verification)
+
+## Family and housing services expanded
+
+Added more focused entries for family and housing support:
+- Relationships Australia (already present)
+- Family Relationship Centres (AU Gov)
+- Link2home NSW
+- Queensland Housing and Homelessness pathways
+
+## Deep candidate import (heavy research batch)
+
+Added `data/imports/helphub_deep_candidates.csv` as a larger candidate batch from official/government/service sources.
+Rows are marked `needs_review` where details require final admin verification before publish.

@@ -39,3 +39,9 @@ Date checked: 2026-04-29
 - eheadspace: https://headspace.org.au/eheadspace/
 - Parentline QLD: https://parentline.com.au/
 - NDIS: https://www.ndis.gov.au/
+
+## Additional advocacy and government services added
+- WWDA: https://wwda.org.au/
+- Carer Gateway (Australian Government): https://www.carergateway.gov.au/
+- Family Relationship Advice Line (Australian Government): https://www.familyrelationships.gov.au/talk-someone/family-relationship-advice-line
+- ANPA (verification pending): https://anpa.org.au/
