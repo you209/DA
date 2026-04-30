@@ -305,3 +305,13 @@ Added production scaffolding for the remaining work:
 - Backup/restore scripts:
   - `scripts/backup.sh`
   - `scripts/restore.sh`
+
+## Supabase + server workflow wiring (started)
+
+Added:
+- Supabase client scaffold: `lib/supabase/client.ts`
+- Admin publish API route scaffold: `app/api/admin/publish/route.ts`
+- Telemetry API route scaffold: `app/api/telemetry/route.ts`
+- Wiring checklist: `docs/ops/SUPABASE_WIRING.md`
+
+Next action is to connect these route handlers to real Supabase writes with JWT role enforcement.
