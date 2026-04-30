@@ -315,3 +315,18 @@ Added:
 - Wiring checklist: `docs/ops/SUPABASE_WIRING.md`
 
 Next action is to connect these route handlers to real Supabase writes with JWT role enforcement.
+
+## Supabase wiring status: enabled
+
+`app/api/admin/publish/route.ts` now performs real server-side updates:
+- validates bearer token
+- resolves admin role from `admin_roles`
+- updates `services.publish_stage`
+- writes `audit_logs` entry
+
+`app/api/telemetry/route.ts` now writes real `telemetry_events` rows.
+
+Required env vars:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY` (server only)
