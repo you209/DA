@@ -3,64 +3,79 @@
 import { useMemo, useState } from 'react';
 import { services } from '@/lib/data';
 
-const practitionerFilters = ['Psychologist', 'Psychiatrist', 'GP', 'Paediatrician', 'Occupational therapist', 'Speech therapist', 'Counsellor', 'Social worker'] as const;
-const specialtyFilters = ['ADHD', 'Autism', 'Trauma', 'Domestic/family violence', 'Child support', 'Adult diagnosis', 'Neurodivergent-friendly', 'Bulk billing', 'Telehealth', 'In person', 'Taking new clients', 'Has booking link'] as const;
-const advocacyFilters = ['Domestic violence', 'Family violence', 'Autism', 'ADHD', 'Grandparents/family support', 'Legal aid', 'Housing', 'Disability support', 'Carer support', 'Men’s support', 'Women’s support', 'LGBTQIA+ support', 'Aboriginal/Torres Strait Islander support', 'Migrant/refugee support'] as const;
-const helplineFilters = ['24/7', 'Crisis', 'Non-crisis', 'Phone', 'Webchat', 'SMS/text', 'Email', 'Anonymous', 'State-based', 'National'] as const;
+const mapLink = (name: string, state: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${state} Australia`)}`;
 
 export default function PractitionersPage() {
-  const [mode, setMode] = useState<'simple' | 'full'>('simple');
-  const [query, setQuery] = useState('');
-  const [selectedProfession, setSelectedProfession] = useState('');
-  const [selectedSpecialty, setSelectedSpecialty] = useState('');
-  const [selectedAdvocacy, setSelectedAdvocacy] = useState('');
-  const [selectedHelpline, setSelectedHelpline] = useState('');
+  const [tab, setTab] = useState<'helplines' | 'practitioners' | 'advocacy'>('helplines');
+  const [stateFilter, setStateFilter] = useState('');
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const practitioners = useMemo(() => services.filter((s) => {
-    const text = `${s.name} ${s.normal_description} ${s.easy_read_description} ${s.categories.join(' ')} ${s.tags.join(' ')}`.toLowerCase();
-    const practitioner = practitionerFilters.some((p) => text.includes(p.toLowerCase())) || s.categories.includes('Psychologists') || s.categories.includes('Doctors/GPs');
-    return practitioner && (!selectedProfession || text.includes(selectedProfession.toLowerCase())) && (!selectedSpecialty || text.includes(selectedSpecialty.toLowerCase())) && (!query || text.includes(query.toLowerCase()));
-  }), [query, selectedProfession, selectedSpecialty]);
+  const filtered = useMemo(() => services.filter((s) => !stateFilter || s.state === stateFilter || s.state === 'Australia-wide'), [stateFilter]);
+  const byState = useMemo(() => filtered.reduce<Record<string, number>>((acc, s) => {
+    acc[s.state] = (acc[s.state] || 0) + 1;
+    return acc;
+  }, {}), [filtered]);
 
-  const advocacyGroups = useMemo(() => services.filter((s) => {
-    const text = `${s.name} ${s.normal_description} ${s.categories.join(' ')} ${s.tags.join(' ')}`.toLowerCase();
-    return (!selectedAdvocacy || text.includes(selectedAdvocacy.toLowerCase())) && (s.tags.includes('advocacy') || s.categories.includes('Legal help') || s.categories.includes('Grandparents/family support'));
-  }), [selectedAdvocacy]);
+  const helplines = filtered.filter((s) => s.phone !== 'NA' && s.categories.includes('Crisis support'));
+  const practitioners = filtered.filter((s) => s.categories.includes('Psychologists') || s.categories.includes('Doctors/GPs'));
+  const advocacy = filtered.filter((s) => s.tags.includes('advocacy') || s.categories.includes('Legal help') || s.categories.includes('Grandparents/family support'));
+  const shown = tab === 'helplines' ? helplines : tab === 'practitioners' ? practitioners : advocacy;
+  const selected = shown.find((s) => s.id === selectedId) || null;
 
-  const helplines = useMemo(() => services.filter((s) => {
-    const text = `${s.name} ${s.normal_description} ${s.categories.join(' ')} ${s.tags.join(' ')} ${s.opening_hours} ${s.service_area}`.toLowerCase();
-    const isHelpline = s.phone !== 'NA' && (s.categories.includes('Crisis support') || s.tags.includes('counselling') || s.tags.includes('support'));
-    return isHelpline && (!selectedHelpline || text.includes(selectedHelpline.toLowerCase()));
-  }), [selectedHelpline]);
-
-  return <main className="p-6 space-y-6">
+  return <main className="p-6 space-y-4">
     <h1 className="text-2xl font-bold">Support directory</h1>
-    <p className="text-sm text-slate-700">Helplines are prioritised first, then practitioners and advocacy groups.</p>
-    <div className="flex gap-2">
-      <button className="rounded border px-3 py-1" onClick={() => setMode('simple')}>Simple Mode</button>
-      <button className="rounded border px-3 py-1" onClick={() => setMode('full')}>Full Mode</button>
+    <p className="text-sm text-slate-700">Starts with helplines first, then practitioners and advocacy. Use state counts and map links to narrow quickly.</p>
+
+    <div className="flex flex-wrap gap-2">
+      <button onClick={() => setTab('helplines')} className="rounded border px-3 py-1">Helplines ({helplines.length})</button>
+      <button onClick={() => setTab('practitioners')} className="rounded border px-3 py-1">Practitioners ({practitioners.length})</button>
+      <button onClick={() => setTab('advocacy')} className="rounded border px-3 py-1">Advocacy ({advocacy.length})</button>
+      <select value={stateFilter} onChange={(e) => setStateFilter(e.target.value)} className="rounded border px-3 py-1"><option value="">All states</option>{Object.keys(byState).sort().map((st) => <option key={st} value={st}>{st} ({byState[st]})</option>)}</select>
     </div>
 
-    <section className="rounded-xl border bg-white p-4 space-y-2">
-      <h2 className="font-semibold">Helplines (priority)</h2>
-      <select value={selectedHelpline} onChange={(e) => setSelectedHelpline(e.target.value)} className="rounded border p-2"><option value="">All helpline types</option>{helplineFilters.map((f) => <option key={f}>{f}</option>)}</select>
-      {helplines.slice(0, mode === 'simple' ? 8 : helplines.length).map((h) => <article key={h.id} className="rounded border p-3"><h3 className="font-semibold">{h.name}</h3><p className="text-sm">{h.opening_hours} · {h.service_area}</p><p className="text-sm">{h.phone}</p><div className="mt-2 flex gap-2"><a href={`tel:${h.phone.replace(/\s/g, '')}`} className="rounded bg-teal-700 px-3 py-1 text-white">Call</a><a href={h.website} className="rounded border px-3 py-1">Website</a></div></article>)}
-    </section>
+    <div className="space-y-3">
+      {shown.map((s) => (
+        <article key={s.id} className="rounded-xl border bg-white p-4">
+          <div className="flex items-center gap-3">
+            <img src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(s.website)}&sz=64`} alt={`${s.name} logo`} className="h-8 w-8 rounded" />
+            <div>
+              <h2 className="font-semibold">{s.name}</h2>
+              <p className="text-sm">{s.easy_read_description}</p>
+            </div>
+          </div>
+          <p className="mt-2 text-sm">{s.state} · {s.opening_hours}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {s.phone !== 'NA' && <a className="rounded bg-teal-700 px-3 py-1 text-white" href={`tel:${s.phone.replace(/\s/g, '')}`}>Call</a>}
+            <a className="rounded border px-3 py-1" href={s.website}>Website</a>
+            <a className="rounded border px-3 py-1" href={mapLink(s.name, s.state)}>View on map</a>
+            <button className="rounded border px-3 py-1" onClick={() => setSelectedId(s.id)}>Learn more</button>
+          </div>
+        </article>
+      ))}
+    </div>
 
-    <section className="rounded-xl border bg-white p-4 space-y-2">
-      <h2 className="font-semibold">Practitioners</h2>
-      <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search practitioner or clinic" className="rounded border p-2 w-full" />
-      <div className="grid gap-2 md:grid-cols-2">
-        <select value={selectedProfession} onChange={(e) => setSelectedProfession(e.target.value)} className="rounded border p-2"><option value="">All professions</option>{practitionerFilters.map((f) => <option key={f}>{f}</option>)}</select>
-        <select value={selectedSpecialty} onChange={(e) => setSelectedSpecialty(e.target.value)} className="rounded border p-2"><option value="">All specialties</option>{specialtyFilters.map((f) => <option key={f}>{f}</option>)}</select>
+    {selected && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setSelectedId(null)}>
+      <div className="max-h-[85vh] w-full max-w-2xl overflow-auto rounded-xl bg-white p-5" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center gap-3">
+          <img src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(selected.website)}&sz=64`} alt={`${selected.name} logo`} className="h-10 w-10 rounded" />
+          <div>
+            <h3 className="text-xl font-semibold">{selected.name}</h3>
+            <p className="text-sm">{selected.state} · {selected.service_area}</p>
+          </div>
+        </div>
+        <p className="mt-3 text-sm">{selected.normal_description}</p>
+        <p className="mt-2 text-sm">Categories: {selected.categories.join(', ')}</p>
+        <p className="text-sm">Key support: {selected.tags.join(', ') || 'General support'}</p>
+        <p className="text-sm">Verified: {selected.verified_status} · Last checked: {selected.last_checked_at}</p>
+        <div className="mt-3 space-y-1 text-sm">
+          <p className="font-semibold">Contact methods</p>
+          {selected.phone !== 'NA' && <a className="block underline" href={`tel:${selected.phone.replace(/\s/g, '')}`}>Phone: {selected.phone}</a>}
+          <a className="block underline" href={selected.website}>Website</a>
+          <a className="block underline" href={mapLink(selected.name, selected.state)}>Directions now (Google Maps)</a>
+        </div>
+        {selected.courses_programs.length > 0 && <div className="mt-3 text-sm"><p className="font-semibold">Courses/programs from this service</p><ul className="list-disc pl-5">{selected.courses_programs.map((c) => <li key={c}>{c}</li>)}</ul></div>}
+        <button className="mt-4 rounded border px-3 py-1" onClick={() => setSelectedId(null)}>Close</button>
       </div>
-      {practitioners.map((p) => <article key={p.id} className="rounded border p-3"><h3 className="font-semibold">{p.name}</h3><p className="text-sm">{p.easy_read_description}</p><p className="text-sm">{p.state}</p>{mode === 'full' && <p className="text-xs text-slate-600">{p.verified_status} · Last checked {p.last_checked_at}</p>}<div className="mt-2 flex gap-2"><a href={`tel:${p.phone.replace(/\s/g, '')}`} className="rounded bg-teal-700 px-3 py-1 text-white">Call</a><a href={p.website} className="rounded border px-3 py-1">Website/Booking</a></div></article>)}
-    </section>
-
-    <section className="rounded-xl border bg-white p-4 space-y-2">
-      <h2 className="font-semibold">Advocacy groups</h2>
-      <select value={selectedAdvocacy} onChange={(e) => setSelectedAdvocacy(e.target.value)} className="rounded border p-2"><option value="">All advocacy topics</option>{advocacyFilters.map((f) => <option key={f}>{f}</option>)}</select>
-      {advocacyGroups.slice(0, mode === 'simple' ? 6 : advocacyGroups.length).map((g) => <article key={g.id} className="rounded border p-3"><h3 className="font-semibold">{g.name}</h3><p className="text-sm">{g.easy_read_description}</p><p className="text-sm">{g.state}</p><div className="mt-2 flex gap-2"><a href={`tel:${g.phone.replace(/\s/g, '')}`} className="rounded bg-teal-700 px-3 py-1 text-white">Call</a><a href={g.website} className="rounded border px-3 py-1">Website</a></div></article>)}
-    </section>
+    </div>}
   </main>;
 }
