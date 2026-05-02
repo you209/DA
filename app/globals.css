@@ -8,3 +8,7 @@ body { @apply bg-slate-50 text-slate-900; }
 .high-contrast button, .high-contrast a { @apply border-white text-white; }
 .font-lg { font-size: 112.5%; }
 .font-xl { font-size: 125%; }
+
+.easy-read { font-size: 1.12rem; line-height: 1.8; letter-spacing: 0.01em; }
+.easy-read p, .easy-read li { max-width: 70ch; }
+.easy-read h1, .easy-read h2, .easy-read h3 { line-height: 1.35; }
