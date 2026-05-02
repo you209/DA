@@ -8,3 +8,16 @@ body { @apply bg-slate-50 text-slate-900; }
 .high-contrast button, .high-contrast a { @apply border-white text-white; }
 .font-lg { font-size: 112.5%; }
 .font-xl { font-size: 125%; }
+
+.easy-read { font-size: 1.12rem; line-height: 1.8; letter-spacing: 0.01em; }
+.easy-read p, .easy-read li { max-width: 70ch; }
+.easy-read h1, .easy-read h2, .easy-read h3 { line-height: 1.35; }
+
+
+.high-contrast body, .high-contrast { background:#0b0b0b !important; color:#f8fafc !important; }
+.high-contrast .bg-white, .high-contrast .bg-slate-50, .high-contrast .bg-blue-50, .high-contrast .bg-amber-50 { background:#111827 !important; }
+.high-contrast .text-slate-900, .high-contrast .text-slate-700, .high-contrast .text-slate-600, .high-contrast .text-teal-800 { color:#f8fafc !important; }
+.high-contrast .border, .high-contrast [class*="border-"] { border-color:#94a3b8 !important; }
+.easy-read { font-size: 1.15rem; line-height: 1.9; letter-spacing: 0.015em; }
+.easy-read h1,.easy-read h2,.easy-read h3 { font-weight:700; line-height:1.4; }
+.easy-read p,.easy-read li,.easy-read button,.easy-read a { font-size:1.05em; }
