@@ -4,7 +4,6 @@ const config: CapacitorConfig = {
   appId: 'au.helphub.app',
   appName: 'HelpHub AU',
   webDir: 'out',
-  bundledWebRuntime: false,
   server: {
     androidScheme: 'https'
   }

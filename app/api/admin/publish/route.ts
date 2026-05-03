@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabase/server';
 
+export const dynamic = 'force-dynamic';
+
 async function getRoleFromBearer(req: NextRequest) {
   const authHeader = req.headers.get('authorization') || '';
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
