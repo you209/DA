@@ -1,8 +1,20 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const service = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+let _client: SupabaseClient | null = null;
 
-export const supabaseServer = createClient(url, service, {
-  auth: { persistSession: false, autoRefreshToken: false }
+function getClient(): SupabaseClient {
+  if (!_client) {
+    _client = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { auth: { persistSession: false, autoRefreshToken: false } }
+    );
+  }
+  return _client;
+}
+
+export const supabaseServer = new Proxy({} as SupabaseClient, {
+  get(_target, prop) {
+    return (getClient() as any)[prop];
+  }
 });
