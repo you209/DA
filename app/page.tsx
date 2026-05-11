@@ -2,76 +2,194 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { Phone, Globe, Search, ChevronRight, Shield } from 'lucide-react';
 import GuidedPathway from '@/components/GuidedPathway';
-import QuickExitButton from '@/components/QuickExitButton';
 import SafetyNotice from '@/components/SafetyNotice';
 import { services } from '@/lib/data';
 
-const topicMap: Record<string, string[]> = {
+const TOPICS: Record<string, string[]> = {
   'I need help now': ['crisis', 'domestic violence', 'family violence', 'emergency'],
-  'Understand what is happening': ['abuse', 'coercive', 'safety', 'trauma'],
+  'Talk to someone': ['crisis', 'counselling', 'mental health', 'support'],
   'Services near me': ['directory', 'support', 'practitioner', 'housing'],
-  'Parenting / court / rights': ['parent', 'family', 'legal', 'separation'],
-  'Neurodivergence support': ['adhd', 'autism', 'neurodivergent']
+  'Parenting & courts': ['parent', 'family', 'legal', 'separation'],
+  'Neurodivergence': ['adhd', 'autism', 'neurodivergent'],
 };
 
 export default function Home() {
   const [query, setQuery] = useState('');
   const [activeTopic, setActiveTopic] = useState('');
-  const [showSplash, setShowSplash] = useState(true);
 
-  const topicKeywords = topicMap[activeTopic] || [];
+  const keywords = TOPICS[activeTopic] || [];
 
-  const results = useMemo(() => services.filter((s) => {
-    const text = `${s.name} ${s.normal_description} ${s.categories.join(' ')} ${s.tags.join(' ')}`.toLowerCase();
-    const queryMatch = !query || text.includes(query.toLowerCase());
-    const topicMatch = !topicKeywords.length || topicKeywords.some((k) => text.includes(k));
-    return queryMatch && topicMatch;
-  }).slice(0, 10), [query, topicKeywords]);
+  const results = useMemo(
+    () =>
+      services
+        .filter((s) => {
+          const text =
+            `${s.name} ${s.normal_description} ${s.categories.join(' ')} ${s.tags.join(' ')}`.toLowerCase();
+          return (
+            (!query || text.includes(query.toLowerCase())) &&
+            (!keywords.length || keywords.some((k) => text.includes(k)))
+          );
+        })
+        .slice(0, 10),
+    [query, keywords]
+  );
 
-  return <main className="min-h-screen bg-gradient-to-b from-slate-50 to-blue-50 p-4 pb-24">
-    <QuickExitButton />
-
-    {showSplash && <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/55 p-4">
-      <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl transition duration-300">
-        <h2 className="text-2xl font-bold text-slate-900">Welcome. You’re not alone.</h2>
-        <p className="mt-2 text-sm text-slate-700">Choose what you need first. You can change this at any time.</p>
-        <div className="mt-4 grid gap-2">{Object.keys(topicMap).slice(0, 4).map((t) => <button key={t} onClick={() => { setActiveTopic(t); setShowSplash(false); }} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-left font-medium transition hover:scale-[1.01] hover:bg-blue-50">{t}</button>)}</div>
-        <button onClick={() => setShowSplash(false)} className="mt-3 text-sm underline">Skip for now</button>
-      </div>
-    </div>}
-
-    <div className="mx-auto max-w-5xl space-y-4">
-      <header className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h1 className="text-3xl font-bold text-slate-900">HelpHub AU</h1>
-        <p className="mt-2 text-sm text-slate-700">A guided support hub for safety, family violence support, parenting and rights information, and trusted services.</p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <a href="tel:000" className="rounded-xl bg-red-700 px-4 py-2 text-white transition hover:bg-red-800">I need help now</a>
-          <Link href="/practitioners" className="rounded-xl border px-4 py-2 transition hover:bg-slate-50">I need services near me</Link>
-          <Link href="/courses" className="rounded-xl border px-4 py-2 transition hover:bg-slate-50">Courses & education</Link>
-          <button onClick={() => setShowSplash(true)} className="rounded-xl border px-4 py-2 transition hover:bg-slate-50">Guided start</button>
+  return (
+    <>
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="bg-teal-800 text-white">
+        <div className="mx-auto max-w-5xl px-4 py-12 md:py-16">
+          <p className="text-sm font-semibold uppercase tracking-widest text-teal-300">
+            Australian Support Services
+          </p>
+          <h1 className="mt-3 text-3xl font-bold leading-tight md:text-4xl">
+            Find the support you need
+          </h1>
+          <p className="mt-3 max-w-2xl text-teal-100 md:text-lg">
+            Trusted pathways to safety, family violence support, legal help, and wellbeing services
+            across Australia.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="tel:000"
+              className="flex items-center gap-2 rounded-lg bg-red-600 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-red-700"
+            >
+              <Phone size={15} strokeWidth={2.5} />
+              Emergency: Call 000
+            </a>
+            <Link
+              href="/practitioners"
+              className="flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-teal-800 transition-colors hover:bg-teal-50"
+            >
+              Find Services Near Me
+              <ChevronRight size={15} />
+            </Link>
+          </div>
         </div>
-      </header>
-
-      <SafetyNotice />
-
-      <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h2 className="text-xl font-semibold">What do you need today?</h2>
-        <div className="mt-3 grid gap-2 md:grid-cols-3">{Object.keys(topicMap).map((topic) => <button key={topic} onClick={() => setActiveTopic(topic)} className={`rounded-2xl px-4 py-3 text-left font-medium transition ${activeTopic===topic ? 'bg-blue-600 text-white shadow' : 'border bg-slate-50 hover:bg-blue-50'}`}>{topic}</button>)}</div>
-        <p className="mt-2 text-sm text-slate-600">Selected: {activeTopic || 'None (showing broad results)'}</p>
       </section>
 
-      <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h2 className="text-xl font-semibold">Search support</h2>
-        <input aria-label="Search support" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Try: coercive control, legal aid, autism, housing, crisis" className="mt-3 w-full rounded-xl border p-3" />
-      </section>
+      {/* ── Main content ─────────────────────────────────────────────────── */}
+      <main className="mx-auto max-w-5xl px-4 py-8 pb-24 space-y-6">
+        <SafetyNotice />
 
-      <GuidedPathway />
+        {/* Topic filters */}
+        <section>
+          <h2 className="text-lg font-semibold text-slate-900">What do you need today?</h2>
+          <p className="mt-1 text-sm text-slate-500">Select a topic to filter relevant services.</p>
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
+            {Object.keys(TOPICS).map((topic) => (
+              <button
+                key={topic}
+                onClick={() => setActiveTopic(activeTopic === topic ? '' : topic)}
+                className={`rounded-xl border-2 px-3 py-3 text-left text-sm font-medium transition-colors ${
+                  activeTopic === topic
+                    ? 'border-teal-700 bg-teal-700 text-white'
+                    : 'border-slate-200 bg-white text-slate-700 hover:border-teal-300 hover:bg-teal-50'
+                }`}
+              >
+                {topic}
+              </button>
+            ))}
+          </div>
+        </section>
 
-      <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h2 className="text-xl font-semibold">Relevant services</h2>
-        <div className="mt-3 space-y-2">{results.length === 0 ? <p className="rounded-xl border bg-slate-50 p-3 text-sm">No matches yet. Try a different topic or search term.</p> : results.map((s)=><article key={s.id} className="rounded-2xl border border-slate-200 p-3 transition hover:shadow"><p className="font-semibold">{s.name}</p><p className="text-sm">{s.easy_read_description}</p><p className="text-xs text-slate-600">Tags: {s.tags.join(', ') || 'General'} · Last verified: {s.last_checked_at}</p><div className="mt-2 flex gap-2">{s.phone !== 'NA' && <a href={`tel:${s.phone.replace(/\s/g,'')}`} className="rounded-lg bg-slate-900 px-3 py-1 text-white">Call</a>}<a href={s.website} className="rounded-lg border px-3 py-1">Website</a></div></article>)}</div>
-      </section>
-    </div>
-  </main>;
+        {/* Search */}
+        <section>
+          <label htmlFor="search" className="text-sm font-medium text-slate-700">
+            Search for support
+          </label>
+          <div className="relative mt-2">
+            <Search
+              size={16}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+            />
+            <input
+              id="search"
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Try: family violence, legal aid, mental health, housing…"
+              className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-9 pr-4 text-sm shadow-sm transition-colors focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+            />
+          </div>
+        </section>
+
+        {/* Guided pathway */}
+        <GuidedPathway />
+
+        {/* Results */}
+        <section>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-900">
+              {activeTopic ? `Services: ${activeTopic}` : 'Support services'}
+            </h2>
+            <span className="text-sm text-slate-500">
+              {results.length} result{results.length !== 1 ? 's' : ''}
+            </span>
+          </div>
+
+          {results.length === 0 ? (
+            <div className="mt-4 rounded-xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
+              No services match your search. Try a broader term or different topic.
+            </div>
+          ) : (
+            <div className="mt-3 space-y-3">
+              {results.map((s) => (
+                <article
+                  key={s.id}
+                  className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+                >
+                  <div className="flex items-start gap-3">
+                    <img
+                      src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(s.website)}&sz=64`}
+                      alt=""
+                      aria-hidden="true"
+                      className="mt-0.5 h-9 w-9 flex-shrink-0 rounded-lg border border-slate-100"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="font-semibold text-slate-900">{s.name}</h3>
+                        {s.verified_status === 'verified' && (
+                          <span className="flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800">
+                            <Shield size={10} />
+                            Verified
+                          </span>
+                        )}
+                      </div>
+                      <p className="mt-1 text-sm text-slate-600">{s.easy_read_description}</p>
+                      <p className="mt-1 text-xs text-slate-400">
+                        {s.state} · {s.opening_hours}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {s.phone !== 'NA' && (
+                      <a
+                        href={`tel:${s.phone.replace(/\s/g, '')}`}
+                        className="flex items-center gap-1.5 rounded-lg bg-teal-700 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
+                      >
+                        <Phone size={13} />
+                        Call {s.phone}
+                      </a>
+                    )}
+                    <a
+                      href={s.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+                    >
+                      <Globe size={13} />
+                      Website
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+      </main>
+    </>
+  );
 }
