@@ -1,8 +1,9 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Phone, Globe, MapPin, Shield, ChevronDown } from 'lucide-react';
+import { Phone, Globe, MapPin, Shield, ChevronDown, Bookmark } from 'lucide-react';
 import { services } from '@/lib/data';
+import { useSavedServices } from '@/lib/useSavedServices';
 
 const mapLink = (name: string, state: string) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${state} Australia`)}`;
@@ -51,6 +52,7 @@ export default function PractitionersPage() {
 
   const shown = tab === 'helplines' ? helplines : tab === 'practitioners' ? practitioners : advocacy;
   const counts = { helplines: helplines.length, practitioners: practitioners.length, advocacy: advocacy.length };
+  const { toggle, isSaved } = useSavedServices();
 
   return (
     <>
@@ -64,7 +66,7 @@ export default function PractitionersPage() {
         </div>
       </div>
 
-      <main className="mx-auto max-w-5xl px-4 py-8 pb-24">
+      <main id="main-content" className="mx-auto max-w-5xl px-4 py-8 pb-24">
         {/* Tabs + state filter */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
@@ -140,6 +142,13 @@ export default function PractitionersPage() {
                       )}
                     </div>
                     <p className="mt-1 text-sm text-slate-600">{s.easy_read_description}</p>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {s.categories.slice(0, 2).map((cat) => (
+                        <span key={cat} className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+                          {cat}
+                        </span>
+                      ))}
+                    </div>
                     <div className="mt-1.5 flex flex-wrap gap-3 text-xs text-slate-400">
                       <span className="flex items-center gap-1">
                         <MapPin size={11} />
@@ -149,6 +158,13 @@ export default function PractitionersPage() {
                       <span>Last verified: {s.last_checked_at}</span>
                     </div>
                   </div>
+                  <button
+                    onClick={() => toggle(s.id)}
+                    className="flex-shrink-0 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-50 hover:text-teal-600"
+                    aria-label={isSaved(s.id) ? 'Remove from saved' : 'Save this service'}
+                  >
+                    <Bookmark size={16} className={isSaved(s.id) ? 'fill-teal-600 text-teal-600' : ''} />
+                  </button>
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-2">

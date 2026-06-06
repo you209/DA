@@ -47,6 +47,14 @@ body {
   font-size: 125%;
 }
 
+/* ─── Form utilities (call log) ────────────────────────────────────────────── */
+.label {
+  @apply text-xs font-semibold uppercase tracking-wide text-slate-500;
+}
+.input {
+  @apply w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500;
+}
+
 /* ─── Easy Read Mode ───────────────────────────────────────────────────────── */
 .easy-read {
   font-size: 1.15rem;

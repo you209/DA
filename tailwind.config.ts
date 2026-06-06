@@ -8,12 +8,21 @@ const config: Config = {
         calm: {
           50: '#f2fbfa',
           100: '#def5f3',
-          600: '#0f766e'
-        }
-      }
-    }
+          600: '#0f766e',
+        },
+      },
+      keyframes: {
+        'slide-in': {
+          '0%': { opacity: '0', transform: 'translateY(8px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        'slide-in': 'slide-in 0.18s ease-out both',
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 };
 
 export default config;

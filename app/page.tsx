@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
-import { Phone, Globe, Search, ChevronRight, Shield } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Phone, Globe, Search, ChevronRight, Shield, Bookmark, ChevronDown } from 'lucide-react';
 import GuidedPathway from '@/components/GuidedPathway';
 import SafetyNotice from '@/components/SafetyNotice';
-import { services } from '@/lib/data';
+import { services, states } from '@/lib/data';
+import { useSavedServices } from '@/lib/useSavedServices';
 
 const TOPICS: Record<string, string[]> = {
   'I need help now': ['crisis', 'domestic violence', 'family violence', 'emergency'],
@@ -18,8 +19,36 @@ const TOPICS: Record<string, string[]> = {
 export default function Home() {
   const [query, setQuery] = useState('');
   const [activeTopic, setActiveTopic] = useState('');
+  const [stateFilter, setStateFilter] = useState('');
+  const [savedOpen, setSavedOpen] = useState(false);
+  const { saved, toggle, isSaved } = useSavedServices();
+
+  // Persist state filter selection
+  useEffect(() => {
+    const stored = localStorage.getItem('helphub_state_filter');
+    if (stored) setStateFilter(stored);
+  }, []);
+  const handleStateChange = (val: string) => {
+    setStateFilter(val);
+    localStorage.setItem('helphub_state_filter', val);
+  };
 
   const keywords = TOPICS[activeTopic] || [];
+
+  const topicCounts = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(TOPICS).map(([topic, kws]) => [
+          topic,
+          services.filter((s) => {
+            const text =
+              `${s.name} ${s.normal_description} ${s.categories.join(' ')} ${s.tags.join(' ')}`.toLowerCase();
+            return kws.some((k) => text.includes(k));
+          }).length,
+        ])
+      ),
+    []
+  );
 
   const results = useMemo(
     () =>
@@ -27,13 +56,21 @@ export default function Home() {
         .filter((s) => {
           const text =
             `${s.name} ${s.normal_description} ${s.categories.join(' ')} ${s.tags.join(' ')}`.toLowerCase();
+          const stateMatch =
+            !stateFilter || s.state === stateFilter || s.state === 'Australia-wide';
           return (
+            stateMatch &&
             (!query || text.includes(query.toLowerCase())) &&
             (!keywords.length || keywords.some((k) => text.includes(k)))
           );
         })
         .slice(0, 10),
-    [query, keywords]
+    [query, keywords, stateFilter]
+  );
+
+  const savedServices = useMemo(
+    () => services.filter((s) => saved.has(s.id)),
+    [saved]
   );
 
   return (
@@ -71,25 +108,108 @@ export default function Home() {
       </section>
 
       {/* ── Main content ─────────────────────────────────────────────────── */}
-      <main className="mx-auto max-w-5xl px-4 py-8 pb-24 space-y-6">
+      <main id="main-content" className="mx-auto max-w-5xl px-4 py-8 pb-32 space-y-6">
         <SafetyNotice />
 
-        {/* Topic filters */}
+        {/* Saved services */}
+        {savedServices.length > 0 && (
+          <section className="rounded-xl border border-teal-200 bg-teal-50 shadow-sm">
+            <button
+              onClick={() => setSavedOpen(!savedOpen)}
+              className="flex w-full items-center justify-between px-4 py-3 text-left"
+              aria-expanded={savedOpen}
+            >
+              <span className="flex items-center gap-2 text-sm font-semibold text-teal-800">
+                <Bookmark size={15} className="fill-teal-600 text-teal-600" />
+                Saved services ({savedServices.length})
+              </span>
+              <ChevronRight
+                size={16}
+                className={`text-teal-500 transition-transform duration-200 ${savedOpen ? 'rotate-90' : ''}`}
+              />
+            </button>
+            {savedOpen && (
+              <div className="border-t border-teal-100 px-4 pb-4 pt-3 space-y-2">
+                {savedServices.map((s) => (
+                  <div
+                    key={s.id}
+                    className="flex items-center justify-between rounded-lg border border-teal-200 bg-white px-3 py-2"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-slate-900">{s.name}</p>
+                      <p className="text-xs text-slate-500">{s.state}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {s.phone !== 'NA' && (
+                        <a
+                          href={`tel:${s.phone.replace(/\s/g, '')}`}
+                          className="rounded-lg bg-teal-700 px-3 py-1 text-xs font-medium text-white hover:bg-teal-800"
+                        >
+                          Call
+                        </a>
+                      )}
+                      <button
+                        onClick={() => toggle(s.id)}
+                        className="rounded-lg p-1 text-teal-600 hover:bg-teal-100"
+                        aria-label="Remove from saved"
+                      >
+                        <Bookmark size={14} className="fill-teal-600" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* Topic filters + state */}
         <section>
-          <h2 className="text-lg font-semibold text-slate-900">What do you need today?</h2>
-          <p className="mt-1 text-sm text-slate-500">Select a topic to filter relevant services.</p>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">What do you need today?</h2>
+              <p className="text-sm text-slate-500">Select a topic to filter relevant services.</p>
+            </div>
+            <div className="relative">
+              <select
+                value={stateFilter}
+                onChange={(e) => handleStateChange(e.target.value)}
+                className="appearance-none rounded-xl border border-slate-200 bg-white py-2 pl-3 pr-8 text-sm text-slate-700 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+              >
+                <option value="">All states</option>
+                {states.map((st) => (
+                  <option key={st} value={st}>
+                    {st}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                size={14}
+                className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400"
+              />
+            </div>
+          </div>
           <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
-            {Object.keys(TOPICS).map((topic) => (
+            {Object.entries(TOPICS).map(([topic]) => (
               <button
                 key={topic}
                 onClick={() => setActiveTopic(activeTopic === topic ? '' : topic)}
-                className={`rounded-xl border-2 px-3 py-3 text-left text-sm font-medium transition-colors ${
+                className={`relative rounded-xl border-2 px-3 py-3 text-left text-sm font-medium transition-colors ${
                   activeTopic === topic
                     ? 'border-teal-700 bg-teal-700 text-white'
                     : 'border-slate-200 bg-white text-slate-700 hover:border-teal-300 hover:bg-teal-50'
                 }`}
               >
                 {topic}
+                <span
+                  className={`ml-1.5 rounded-full px-1.5 py-0.5 text-xs ${
+                    activeTopic === topic
+                      ? 'bg-teal-600 text-teal-100'
+                      : 'bg-slate-100 text-slate-500'
+                  }`}
+                >
+                  {topicCounts[topic]}
+                </span>
               </button>
             ))}
           </div>
@@ -131,15 +251,17 @@ export default function Home() {
           </div>
 
           {results.length === 0 ? (
-            <div className="mt-4 rounded-xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
-              No services match your search. Try a broader term or different topic.
+            <div className="mt-4 rounded-xl border border-slate-200 bg-white p-8 text-center">
+              <p className="text-sm font-medium text-slate-600">No services match your search.</p>
+              <p className="mt-1 text-xs text-slate-400">Try a broader term, different topic, or change the state filter.</p>
             </div>
           ) : (
-            <div className="mt-3 space-y-3">
-              {results.map((s) => (
+            <div key={`${activeTopic}-${query}-${stateFilter}`} className="mt-3 space-y-3">
+              {results.map((s, i) => (
                 <article
                   key={s.id}
-                  className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+                  style={{ animationDelay: `${Math.min(i * 30, 150)}ms` }}
+                  className="animate-slide-in rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
                 >
                   <div className="flex items-start gap-3">
                     <img
@@ -159,10 +281,30 @@ export default function Home() {
                         )}
                       </div>
                       <p className="mt-1 text-sm text-slate-600">{s.easy_read_description}</p>
-                      <p className="mt-1 text-xs text-slate-400">
-                        {s.state} · {s.opening_hours}
-                      </p>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {s.categories.slice(0, 2).map((cat) => (
+                          <span
+                            key={cat}
+                            className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600"
+                          >
+                            {cat}
+                          </span>
+                        ))}
+                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
+                          {s.opening_hours}
+                        </span>
+                      </div>
                     </div>
+                    <button
+                      onClick={() => toggle(s.id)}
+                      className="ml-1 flex-shrink-0 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-50 hover:text-teal-600"
+                      aria-label={isSaved(s.id) ? 'Remove from saved' : 'Save this service'}
+                    >
+                      <Bookmark
+                        size={16}
+                        className={isSaved(s.id) ? 'fill-teal-600 text-teal-600' : ''}
+                      />
+                    </button>
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {s.phone !== 'NA' && (

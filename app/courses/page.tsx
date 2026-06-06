@@ -55,7 +55,7 @@ export default function CoursesPage() {
         </div>
       </div>
 
-      <main className="mx-auto max-w-5xl px-4 py-8 pb-24">
+      <main id="main-content" className="mx-auto max-w-5xl px-4 py-8 pb-24">
         {/* Filter bar */}
         <div className="flex items-center justify-between">
           <p className="text-sm text-slate-500">
