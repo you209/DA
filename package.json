@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "npx --yes serve@latest out -l tcp://0.0.0.0:${PORT:-3000}",
     "lint": "next lint",
-    "export": "next build && next export",
+    "export": "next build",
     "android:init": "npx cap add android",
     "android:sync": "bash scripts/build-static.sh && npx cap sync android",
     "android:open": "npx cap open android"
