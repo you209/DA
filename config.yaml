@@ -1,0 +1,22 @@
+name: DA HelpHub
+description: HelpHub AU local support information app.
+version: "0.1.0"
+slug: da_helphub
+url: https://github.com/you209/DA
+arch:
+  - amd64
+  - aarch64
+init: false
+startup: application
+boot: auto
+webui: "http://[HOST]:[PORT:3000]"
+ingress: true
+ingress_port: 3000
+panel_icon: mdi:lifebuoy
+panel_title: DA HelpHub
+ports:
+  3000/tcp: 3001
+ports_description:
+  3000/tcp: DA HelpHub web interface
+options: {}
+schema: {}
