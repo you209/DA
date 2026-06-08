@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#f8fafc"/>
+  <rect x="48" y="48" width="1104" height="579" rx="24" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="84" y="105" font-family="Arial" font-size="30" font-weight="700" fill="#0f172a">Support directory</text>
+  <rect x="84" y="140" width="1010" height="58" rx="16" fill="#f1f5f9" stroke="#e2e8f0"/>
+  <text x="112" y="176" font-family="Arial" font-size="17" fill="#64748b">Search services, categories, or locations</text>
+  <rect x="84" y="232" width="300" height="330" rx="20" fill="#ecfeff" stroke="#99f6e4"/>
+  <text x="112" y="276" font-family="Arial" font-size="22" font-weight="700" fill="#115e59">Service card</text>
+  <rect x="112" y="304" width="220" height="18" rx="9" fill="#5eead4"/>
+  <rect x="112" y="340" width="250" height="14" rx="7" fill="#99f6e4"/>
+  <rect x="112" y="370" width="210" height="14" rx="7" fill="#99f6e4"/>
+  <rect x="112" y="430" width="100" height="38" rx="12" fill="#0f766e"/>
+  <text x="140" y="455" font-family="Arial" font-size="14" font-weight="700" fill="#fff">Call</text>
+  <rect x="414" y="232" width="300" height="330" rx="20" fill="#eff6ff" stroke="#bfdbfe"/>
+  <text x="442" y="276" font-family="Arial" font-size="22" font-weight="700" fill="#1e3a8a">Service card</text>
+  <rect x="442" y="304" width="220" height="18" rx="9" fill="#93c5fd"/>
+  <rect x="442" y="340" width="250" height="14" rx="7" fill="#bfdbfe"/>
+  <rect x="442" y="370" width="210" height="14" rx="7" fill="#bfdbfe"/>
+  <rect x="744" y="232" width="300" height="330" rx="20" fill="#fff7ed" stroke="#fed7aa"/>
+  <text x="772" y="276" font-family="Arial" font-size="22" font-weight="700" fill="#7c2d12">Service card</text>
+  <rect x="772" y="304" width="220" height="18" rx="9" fill="#fdba74"/>
+  <rect x="772" y="340" width="250" height="14" rx="7" fill="#fed7aa"/>
+  <rect x="772" y="370" width="210" height="14" rx="7" fill="#fed7aa"/>
+</svg>
