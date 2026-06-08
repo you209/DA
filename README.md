@@ -8,25 +8,17 @@ It is designed to make support information easier to browse, with simple mode, p
 
 ## Screenshots
 
-Add screenshots into `docs/screenshots/` using these filenames:
+These are generated SVG screenshot mockups. Replace them later with real app screenshots if you want exact captures.
 
-| Screen | Image |
-| --- | --- |
-| Home / simple mode | `docs/screenshots/home.png` |
-| Support directory | `docs/screenshots/support-directory.png` |
-| Courses and programs | `docs/screenshots/courses.png` |
-| Policy / safety page | `docs/screenshots/policy.png` |
-| Mobile view | `docs/screenshots/mobile.png` |
+![Home](docs/screenshots/home.svg)
 
-```md
-![Home](docs/screenshots/home.png)
-![Support directory](docs/screenshots/support-directory.png)
-![Courses](docs/screenshots/courses.png)
-![Policy](docs/screenshots/policy.png)
-![Mobile](docs/screenshots/mobile.png)
+![Support directory](docs/screenshots/support-directory.svg)
+
+Screenshot guide:
+
+```text
+docs/screenshots/README.md
 ```
-
-> Screenshot image files are not included yet. Add PNG/JPG files to `docs/screenshots/` when ready.
 
 ---
 
@@ -189,24 +181,14 @@ data/imports/helphub_services_seed.csv
 
 ```text
 app/
-  page.tsx
-  practitioners/
-  courses/
-  policy/
 components/
-  AccessibilityToolbar.tsx
-  GuidedPathway.tsx
-  QuickExitButton.tsx
-  SafetyNotice.tsx
 lib/
-  data.ts
-  types.ts
-  ingestion.ts
 data/
   imports/
-    helphub_services_seed.csv
 docs/
   screenshots/
+    home.svg
+    support-directory.svg
 ```
 
 ---
