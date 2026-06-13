@@ -50,7 +50,7 @@ export default function AccessibilityToolbar() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-wrap gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-lg">
+    <div className="fixed bottom-4 right-4 z-50 flex flex-wrap gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-lg print:hidden">
       {MODES.map((mode) => (
         <button
           key={mode.key}

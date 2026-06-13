@@ -8,12 +8,13 @@ const NAV: { href: Route; label: string }[] = [
   { href: '/practitioners', label: 'Find Services' },
   { href: '/courses', label: 'Courses' },
   { href: '/call-log' as Route, label: 'Call Log' },
+  { href: '/safety-plan' as Route, label: 'Safety Plan' },
 ];
 
 export default function SiteHeader() {
   const path = usePathname();
   return (
-    <header className="sticky top-0 z-50 shadow-md">
+    <header className="sticky top-0 z-50 shadow-md print:hidden">
       {/* Crisis numbers bar */}
       <div className="bg-red-950 py-1.5 text-xs text-red-200">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-5 gap-y-0.5 px-4">

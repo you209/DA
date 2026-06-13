@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function SiteFooter() {
   return (
-    <footer className="bg-slate-900 text-slate-400">
+    <footer className="bg-slate-900 text-slate-400 print:hidden">
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
@@ -21,6 +21,8 @@ export default function SiteFooter() {
               <li><Link href="/" className="transition-colors hover:text-white">Home</Link></li>
               <li><Link href="/practitioners" className="transition-colors hover:text-white">Find Services</Link></li>
               <li><Link href="/courses" className="transition-colors hover:text-white">Courses &amp; Programs</Link></li>
+              <li><Link href="/call-log" className="transition-colors hover:text-white">Call Log</Link></li>
+              <li><Link href="/safety-plan" className="transition-colors hover:text-white">Safety Plan</Link></li>
               <li><Link href="/policy" className="transition-colors hover:text-white">Privacy &amp; Safety</Link></li>
             </ul>
           </div>
