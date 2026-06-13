@@ -1,10 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import SiteHeader from '@/components/SiteHeader';
-import SiteFooter from '@/components/SiteFooter';
-import AccessibilityToolbar from '@/components/AccessibilityToolbar';
-import OfflineBanner from '@/components/OfflineBanner';
+import AppShell from '@/components/AppShell';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -23,11 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to main content
         </a>
-        <SiteHeader />
-        <OfflineBanner />
-        <div className="flex-1">{children}</div>
-        <SiteFooter />
-        <AccessibilityToolbar />
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

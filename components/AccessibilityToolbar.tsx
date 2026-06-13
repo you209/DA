@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 
 type Mode = { key: string; cls: string; label: string; activeLabel: string };
 
@@ -10,7 +11,15 @@ const MODES: Mode[] = [
   { key: 'high_contrast_mode', cls: 'high-contrast', label: 'Contrast', activeLabel: 'Contrast' },
 ];
 
-export default function AccessibilityToolbar() {
+export default function AccessibilityToolbar({
+  disguiseEnabled,
+  onEnableDisguise,
+  onDisableDisguise,
+}: {
+  disguiseEnabled: boolean;
+  onEnableDisguise: () => void;
+  onDisableDisguise: () => void;
+}) {
   const [active, setActive] = useState<Record<string, boolean>>({});
   const [speaking, setSpeaking] = useState(false);
 
@@ -49,6 +58,19 @@ export default function AccessibilityToolbar() {
     setSpeaking(true);
   };
 
+  const handleDisguiseClick = () => {
+    if (disguiseEnabled) {
+      onDisableDisguise();
+      return;
+    }
+    const ok = confirm(
+      'HelpHub will be hidden behind a Notes app screen.\n\n' +
+        'To bring HelpHub back, tap the "Notes" title 5 times quickly.\n\n' +
+        'Turn on disguise mode?'
+    );
+    if (ok) onEnableDisguise();
+  };
+
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-wrap gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-lg print:hidden">
       {MODES.map((mode) => (
@@ -73,6 +95,17 @@ export default function AccessibilityToolbar() {
         }`}
       >
         {speaking ? 'Stop' : 'Read aloud'}
+      </button>
+      <button
+        onClick={handleDisguiseClick}
+        className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+          disguiseEnabled
+            ? 'border-slate-700 bg-slate-900 text-white'
+            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+        }`}
+      >
+        {disguiseEnabled ? <Eye size={13} /> : <EyeOff size={13} />}
+        {disguiseEnabled ? 'Exit disguise' : 'Disguise'}
       </button>
     </div>
   );
