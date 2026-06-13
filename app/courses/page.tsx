@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { Globe, Phone, Shield, ChevronDown } from 'lucide-react';
 import { services } from '@/lib/data';
+import ProviderIcon from '@/components/ProviderIcon';
 
 export default function CoursesPage() {
   const [stateFilter, setStateFilter] = useState('');
@@ -94,12 +95,7 @@ export default function CoursesPage() {
                 className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
               >
                 <div className="flex items-start gap-3">
-                  <img
-                    src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(p.website)}&sz=64`}
-                    alt=""
-                    aria-hidden="true"
-                    className="mt-0.5 h-10 w-10 flex-shrink-0 rounded-lg border border-slate-100"
-                  />
+                  <ProviderIcon className="mt-0.5 h-10 w-10" />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h2 className="font-semibold text-slate-900">{p.title}</h2>

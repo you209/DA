@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import AccessibilityToolbar from '@/components/AccessibilityToolbar';
+import OfflineBanner from '@/components/OfflineBanner';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to main content
         </a>
         <SiteHeader />
+        <OfflineBanner />
         <div className="flex-1">{children}</div>
         <SiteFooter />
         <AccessibilityToolbar />

@@ -7,6 +7,7 @@ import GuidedPathway from '@/components/GuidedPathway';
 import SafetyNotice from '@/components/SafetyNotice';
 import { services, states } from '@/lib/data';
 import { useSavedServices } from '@/lib/useSavedServices';
+import ProviderIcon from '@/components/ProviderIcon';
 
 const TOPICS: Record<string, string[]> = {
   'I need help now': ['crisis', 'domestic violence', 'family violence', 'emergency'],
@@ -264,12 +265,7 @@ export default function Home() {
                   className="animate-slide-in rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
                 >
                   <div className="flex items-start gap-3">
-                    <img
-                      src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(s.website)}&sz=64`}
-                      alt=""
-                      aria-hidden="true"
-                      className="mt-0.5 h-9 w-9 flex-shrink-0 rounded-lg border border-slate-100"
-                    />
+                    <ProviderIcon className="mt-0.5 h-9 w-9" />
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <h3 className="font-semibold text-slate-900">{s.name}</h3>
