@@ -1,0 +1,8 @@
+{
+  "type": "node",
+  "install": "npm install",
+  "start": "npm run dev",
+  "port": 3000,
+  "build_system": "android",
+  "notes": "Requires NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env vars; APK is produced by the GitHub Actions workflow (.github/workflows/build-android.yml) because the Android Gradle plugin requires Google Maven access not available locally."
+}
