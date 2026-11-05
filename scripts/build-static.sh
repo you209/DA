@@ -1,17 +1,27 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Temporarily exclude server-only API routes from the static export build.
-# These routes run on a separate backend; they are not bundled into the APK.
-API_DIR="app/api"
-API_BACKUP="/tmp/helphub-api-backup"
+# Capacitor needs static HTML in out/, but server deployments keep Next.js.
+cd "$(dirname "$0")/.."
 
-cleanup() {
-  if [ -d "$API_BACKUP" ]; then
-    mv "$API_BACKUP" "$API_DIR"
+# Remove server-only API routes just for the export and restore on any exit.
+BACKUP_DIR="$(mktemp -d)"
+restore() {
+  if [[ -d "$BACKUP_DIR/api" ]]; then
+    mv "$BACKUP_DIR/api" app/api
   fi
+  rm -rf "$BACKUP_DIR"
 }
-trap cleanup EXIT
+trap restore EXIT
 
-mv "$API_DIR" "$API_BACKUP"
-npm run build
+if [[ -d app/api ]]; then
+  mv app/api "$BACKUP_DIR/api"
+fi
+
+rm -rf out
+CAPACITOR_BUILD=1 npm run build
+
+if [[ ! -f out/index.html ]]; then
+  echo "Static export failed: out/index.html was not generated" >&2
+  exit 1
+fi
